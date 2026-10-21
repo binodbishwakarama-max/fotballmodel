@@ -34,6 +34,12 @@ services:
           property: connectionString
       - key: WEB_ORIGIN
         value: https://bwb-forecast-web.onrender.com
+      - key: BWB_LEDGER_PUBLIC_URL
+        value: https://github.com/binodbishwakarama-max/fotballmodel
+      - key: BWB_LEDGER_PUBLIC_BRANCH
+        value: ledger
+      - key: BWB_LEDGER_PUBLIC_PATH
+        value: ledger
 
   - type: worker
     name: bwb-forecast-scheduler
@@ -58,7 +64,7 @@ services:
       - key: BWB_LEDGER_PUBLIC_URL
         value: https://github.com/binodbishwakarama-max/fotballmodel
       - key: BWB_LEDGER_PUBLIC_BRANCH
-        value: main
+        value: ledger
       - key: BWB_LEDGER_PUBLIC_PATH
         value: ledger
       - key: FOOTBALL_DATA_ORG_TOKEN
