@@ -1,0 +1,57 @@
+[project]
+name = "bwb-forecast"
+version = "0.1.0"
+description = "A reproducible, pre-match football forecasting engine."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.2,<3",
+    "httpx>=0.28,<1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3,<9",
+    "ruff>=0.11,<1",
+]
+data = [
+    "lightgbm>=4.6,<5",
+    "optuna>=4.3,<5",
+    "pandas>=2.2,<4",
+    "scikit-learn>=1.6,<2",
+    "shap>=0.47,<1",
+]
+db = [
+    "alembic>=1.15,<2",
+    "psycopg[binary]>=3.2,<4",
+    "sqlalchemy>=2.0,<3",
+]
+api = [
+    "anthropic>=0.49,<1",
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.34,<1",
+]
+ops = [
+    "apscheduler>=3.11,<4",
+    "opentimestamps-client>=0.7,<1",
+]
+
+[project.scripts]
+bwb = "forecast.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["forecast"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,23 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/raw/
+data/cache/
+data/processed/
+models/
+reports/generated/
+out/
+Football Forecasting Engine Cursor Prompt Chain.pdf
+*.py[cod]

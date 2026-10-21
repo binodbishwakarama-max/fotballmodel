@@ -1,0 +1,67 @@
+databases:
+  - name: bwb-forecast-db
+    plan: basic-256mb
+    databaseName: bwb_forecast
+    user: bwb_forecast
+
+services:
+  - type: web
+    name: bwb-forecast-web
+    runtime: node
+    plan: starter
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- --hostname 0.0.0.0 --port $PORT
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: https://bwb-forecast-api.onrender.com
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://bwb-forecast-web.onrender.com
+
+  - type: web
+    name: bwb-forecast-api
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: uv run --locked bwb serve --host 0.0.0.0 --port $PORT
+    preDeployCommand: uv run --locked alembic upgrade head
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bwb-forecast-db
+          property: connectionString
+      - key: WEB_ORIGIN
+        value: https://bwb-forecast-web.onrender.com
+
+  - type: worker
+    name: bwb-forecast-scheduler
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: uv run --locked bwb scheduler
+    disk:
+      name: bwb-forecast-models
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bwb-forecast-db
+          property: connectionString
+      - key: BWB_MODELS_DIR
+        value: /var/data/models
+      - key: BWB_LEDGER_DIR
+        value: /var/data/ledger
+      - key: BWB_LEDGER_PUBLIC_URL
+        value: https://github.com/binodbishwakarama-max/fotballmodel
+      - key: BWB_LEDGER_PUBLIC_BRANCH
+        value: main
+      - key: BWB_LEDGER_PUBLIC_PATH
+        value: ledger
+      - key: FOOTBALL_DATA_ORG_TOKEN
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false

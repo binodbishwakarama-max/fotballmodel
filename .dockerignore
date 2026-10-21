@@ -1,0 +1,15 @@
+.env
+.git
+.venv
+__pycache__
+.pytest_cache
+.ruff_cache
+.next
+node_modules
+web/node_modules
+web/.next
+data
+models
+ledger
+reports
+*.pdf
